@@ -5,12 +5,12 @@ using UnityEngine;
 using ExtensionMethods;
 [RequireComponent(typeof(Outline))]
 
-public class Rotate_Detail : MonoBehaviour
+public class Rotated_Detail : MonoBehaviour
 {
     public string _name;
     private Compressor _compressor;
     [SerializeField] private float minRotationAngle = 0.0f;
-    [SerializeField] private float maxRotationAngle = 90.0f;
+    [SerializeField] private float maxRotationAngle = 360.0f;
     private Quaternion originalRotation;
     private bool isMouseOver = false;
     private bool isMouseDrag = false;
@@ -53,15 +53,15 @@ public class Rotate_Detail : MonoBehaviour
             valveAngle = Mathf.Clamp(valveAngle, minRotationAngle, maxRotationAngle);
             int valveAngleX = Convert.ToInt32(valveAngle);
 
-            
-            transform.localRotation = Quaternion.Euler(0, valveAngleX.MapInt(0, 90, 0, 2) * 45, 0);
-            CyclonGlobalData.valve1Angle = Mathf.Clamp(valveAngleX.MapInt(135, 225, 0, 2) * 45, 0, 90);
+
+            transform.localRotation = Quaternion.Euler(0, 0, valveAngleX.MapInt(0, 360, 0, 12) * 30);
+            CyclonGlobalData.valve1Angle = Mathf.Clamp(valveAngleX.MapInt(0, 360, 0, 12) * 30, 0, 360);
 
 
 
 
-            _compressor.factorDescent = factorDescent + valveAngle.MapFloat(0, 90, 0, inpactOnPressure * 0.35f);
-            _compressor.factorPumping = factorPumping - valveAngle.MapFloat(0, 90, 0, inpactOnPressure);
+            _compressor.factorDescent = factorDescent + valveAngle.MapFloat(0, 360, 0, inpactOnPressure * 0.35f);
+            _compressor.factorPumping = factorPumping - valveAngle.MapFloat(0, 360, 0, inpactOnPressure);
         }
     }
     private void OnMouseDrag()
