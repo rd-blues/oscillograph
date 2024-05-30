@@ -54,9 +54,8 @@ public class Rotate_Detail : MonoBehaviour
             int valveAngleX = Convert.ToInt32(valveAngle);
 
             
-            transform.localRotation = Quaternion.Euler(0, valveAngleX.MapInt(0, 90, 0, 2) * 45, 0);
-            CyclonGlobalData.valve1Angle = Mathf.Clamp(valveAngleX.MapInt(135, 225, 0, 2) * 45, 0, 90);
-
+            transform.localRotation = Quaternion.Euler(-90, 0, valveAngleX.MapInt(0, 90, 0, 2) * 45);
+            CyclonGlobalData.valve1Angle = Mathf.Clamp(valveAngleX.MapInt(0, 90, 0, 2) * 45, 0, 90);
 
 
 
