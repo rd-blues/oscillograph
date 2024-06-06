@@ -11,6 +11,8 @@ public class Rotated_Detail : MonoBehaviour
     private Compressor _compressor;
     [SerializeField] private float minRotationAngle = 0.0f;
     [SerializeField] private float maxRotationAngle = 360.0f;
+    [SerializeField] private int parts;
+    [SerializeField] private int stepDegree;
     private Quaternion originalRotation;
     private bool isMouseOver = false;
     private bool isMouseDrag = false;
@@ -54,8 +56,8 @@ public class Rotated_Detail : MonoBehaviour
             int valveAngleX = Convert.ToInt32(valveAngle);
 
 
-            transform.localRotation = Quaternion.Euler(0, 0, valveAngleX.MapInt(0, 360, 0, 12) * 30);
-            CyclonGlobalData.valve1Angle = Mathf.Clamp(valveAngleX.MapInt(0, 360, 0, 12) * 30, 0, 360);
+            transform.localRotation = Quaternion.Euler(0, 0, valveAngleX.MapInt(0, 360, 0, parts) * stepDegree);
+            CyclonGlobalData.valve1Angle = Mathf.Clamp(valveAngleX.MapInt(0, 360, 0, parts) * stepDegree, 0, 360);
 
 
 
