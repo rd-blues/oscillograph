@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     //Camera_Contoroll
     GameObject cam;
     CharacterController controller;
-    float LookUp = 0.0f;
+    public float LookUp = 0.0f;
     float LookAside = 0.0f;
     float MovementForward = 0.0f;
     float MovementAside = 0.0f;
