@@ -13,12 +13,23 @@ public class Cable_Script : MonoBehaviour
 
     public Transform parent1;
     public Transform parent2;
+    public Transform secondCable;
     public GameObject child;
+    public bool signalOutput = false;
+    public bool sinusoidalSignal = false;
+    public float hz;
+    public float v;
     
 
     
     private void Update()
     {
+        if (signalOutput == true)
+        {
+            secondCable.GetComponent<Cable_Script>().hz = hz;
+            secondCable.GetComponent<Cable_Script>().v = v;
+            secondCable.GetComponent <Cable_Script>().sinusoidalSignal = sinusoidalSignal;
+        }
 
         if (isMouseDrag || isMouseOver)
             GetComponent<Outline>().enabled = true;

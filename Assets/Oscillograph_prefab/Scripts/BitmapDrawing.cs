@@ -143,7 +143,7 @@ namespace ProtoTurtle.BitmapDrawing
             //texture.DrawPixel(-cx + x, -cy + y, color);
             //texture.DrawPixel(cx + x,  -cy + y, color);
             texture.DrawLine(-cx + x, -cy + y, cx + x, -cy + y, color);
-            
+
             //texture.DrawPixel(-cy + x, -cx + y, color);
             //texture.DrawPixel(cy + x,  -cx + y, color);
             texture.DrawLine(-cy + x, -cx + y, cy + x, -cx + y, color);
@@ -176,7 +176,7 @@ namespace ProtoTurtle.BitmapDrawing
                 return;
             }
 
-            copyBmp[start.X, start.Y] =  newColor;
+            copyBmp[start.X, start.Y] = newColor;
 
             Queue<Point> openNodes = new Queue<Point>();
             openNodes.Enqueue(start);
@@ -185,12 +185,12 @@ namespace ProtoTurtle.BitmapDrawing
 
             // TODO: remove this
             // emergency switch so it doesn't hang if something goes wrong
-            int emergency = width*height;
+            int emergency = width * height;
 
             while (openNodes.Count > 0)
             {
                 i++;
-                
+
                 if (i > emergency)
                 {
                     return;
@@ -204,7 +204,7 @@ namespace ProtoTurtle.BitmapDrawing
                 {
                     if (copyBmp[x - 1, y] == originalColor)
                     {
-                        copyBmp[x - 1, y] =  newColor;
+                        copyBmp[x - 1, y] = newColor;
                         openNodes.Enqueue(new Point(x - 1, y));
                     }
                 }
@@ -228,7 +228,7 @@ namespace ProtoTurtle.BitmapDrawing
                 {
                     if (copyBmp[x, y + 1] == originalColor)
                     {
-                        copyBmp[x, y + 1] =  newColor;
+                        copyBmp[x, y + 1] = newColor;
                         openNodes.Enqueue(new Point(x, y + 1));
                     }
                 }
@@ -260,7 +260,7 @@ namespace ProtoTurtle.BitmapDrawing
                 }
                 set
                 {
-                    data[x + y * width] = value; 
+                    data[x + y * width] = value;
                 }
             }
         }
@@ -313,7 +313,7 @@ namespace ProtoTurtle.BitmapDrawing
             }
 
             int transformedY = TransformToLeftTop_y(rectangle.y, texture.height) - (int)rectangle.height;
-            texture.SetPixels((int)rectangle.x, transformedY, 
+            texture.SetPixels((int)rectangle.x, transformedY,
                 (int)rectangle.width, (int)rectangle.height, colorsArray);
         }
 

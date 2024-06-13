@@ -11,7 +11,7 @@ public class Switch : MonoBehaviour
     private bool isMouseOver = false;
     private bool isMouseDrag = false;
         
-    private bool switchState = false;
+    public bool switchState = false;
 
 
     private void Update()

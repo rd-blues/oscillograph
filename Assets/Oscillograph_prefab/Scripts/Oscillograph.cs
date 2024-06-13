@@ -71,15 +71,16 @@ public class Oscillograph : MonoBehaviour
     private int textureWidth = 300 / 2;
     private int textureHeight = 300 / 2;
 
-    /*
+    
     private void Awake()
     {
         instance = this;
         //сетка
         textureGrid = new Texture2D(textureWidth, textureHeight, TextureFormat.RGBA32, false);
         textureGrid.wrapMode = TextureWrapMode.Clamp;
-        textureGrid.filterMode = FilterMode.Point;
+        textureGrid.filterMode = FilterMode.Point;        
         displayGrid.GetComponent<Renderer>().material.mainTexture = textureGrid;
+        
         //графики
         textureLine = new Texture2D(textureWidth, textureHeight, TextureFormat.RGBA32, false);
         textureLine.wrapMode = TextureWrapMode.Clamp;
@@ -91,6 +92,9 @@ public class Oscillograph : MonoBehaviour
 
         DrawGrid();
         displayLine.SetActive(false);
+
+        
+        
 
     }
 
@@ -123,12 +127,12 @@ public class Oscillograph : MonoBehaviour
         frequencyX = 0;
         frequencyY = 0;
         if (inputSynchA != null)
-            if (inputSynchA.insertedObject != null)
+            if (inputSynchA.socketPoint.childCount != 0)
             {
-                inputSynchAVoltage = inputSynchA.insertedObject.transform.parent.GetComponent<WireRender>().GetWireVoltage();
-                inputSynchAFrequency = inputSynchA.insertedObject.transform.parent.GetComponent<WireRender>().GetWireFrequency();
+                inputSynchAVoltage = inputSynchA.v;
+                inputSynchAFrequency = inputSynchA.hz;
 
-                if (xInput.insertedObject != null)
+                if (xInput.socketPoint.childCount != 0)
                 {
                     voltageY = inputSynchAVoltage;
                     frequencyY = inputSynchAFrequency;
@@ -141,50 +145,50 @@ public class Oscillograph : MonoBehaviour
             }
 
         if (inputSynchB != null)
-            if (inputSynchB.insertedObject != null)
+            if (inputSynchB.socketPoint.childCount != 0)
             {
-                inputSynchBVoltage = inputSynchB.insertedObject.transform.parent.GetComponent<WireRender>().GetWireVoltage();
-                inputSynchBFrequency = inputSynchB.insertedObject.transform.parent.GetComponent<WireRender>().GetWireFrequency();
+                inputSynchBVoltage = inputSynchB.v;
+                inputSynchBFrequency = inputSynchB.hz;
                 voltageY = inputSynchBVoltage;
                 frequencyY = inputSynchBFrequency;
             }
 
         if (plusInput != null)
-            if (plusInput.insertedObject != null)
+            if (plusInput.socketPoint.childCount != 0)
             {
-                plusInputFrequency = plusInput.insertedObject.transform.parent.GetComponent<WireRender>().GetWireFrequency();
-                plusInputVoltage = plusInput.insertedObject.transform.parent.GetComponent<WireRender>().GetWireVoltage();
+                plusInputFrequency = plusInput.hz;
+                plusInputVoltage = plusInput.v;
                 voltageX = plusInputVoltage;
                 frequencyX = plusInputFrequency;
             }
 
         if (minusInput != null)
-            if (minusInput.insertedObject != null)
+            if (minusInput.socketPoint.childCount != 0)
             {
-                minusInputFrequency = minusInput.insertedObject.transform.parent.GetComponent<WireRender>().GetWireFrequency();
-                minusInputVoltage = minusInput.insertedObject.transform.parent.GetComponent<WireRender>().GetWireVoltage();
+                minusInputFrequency = minusInput.hz;
+                minusInputVoltage = minusInput.v;
                 voltageY = minusInputVoltage;
                 frequencyY = minusInputFrequency;
             }
         if (xInput != null)
-            if (xInput.insertedObject != null)
+            if (xInput.socketPoint.childCount != 0)
             {
-                xInputFrequency = xInput.insertedObject.transform.parent.GetComponent<WireRender>().GetWireFrequency();
-                xInputVoltage = xInput.insertedObject.transform.parent.GetComponent<WireRender>().GetWireVoltage();
+                xInputFrequency = xInput.hz;
+                xInputVoltage = xInput.v;
                 voltageX = xInputVoltage;
                 frequencyX = xInputFrequency;
             }
     }
     private void SwitchLedColor()
     {
-        if (powerButton.buttonState == ButtonState.pressed)
+        if (powerButton.switchState == true)
         {
-            powerLight.GetComponent<MeshRenderer>().material = materials[1];
+            //powerLight.GetComponent<MeshRenderer>().material = materials[1];
             isOn = true;
         }
         else
         {
-            powerLight.GetComponent<MeshRenderer>().material = materials[0];
+            //powerLight.GetComponent<MeshRenderer>().material = materials[0];
             isOn = false;
         }
     }
@@ -269,6 +273,8 @@ public class Oscillograph : MonoBehaviour
         textureGrid.DrawLine(textureWidth / 2, 0, textureWidth / 2, textureHeight, frameColor);
         textureGrid.DrawRectangle(new Rect(0, 0, textureWidth, textureHeight), frameColor);
 
+
+
         // textureGrid.DrawPixel(0, textureHeight / 2, Color.blue);
 
         textureGrid.Apply();
@@ -278,7 +284,7 @@ public class Oscillograph : MonoBehaviour
     {
         // textureLine.DrawFilledRectangle(new Rect(0, 0, textureWidth, textureHeight), Color.clear);
 
-        if (inputSynchA.sygnalType == Socket.SygnalType.sinusoidal)
+        if (inputSynchA.sinusoidalType == true)
         {
             int lastX = 0;
             int lastY = (textureHeight / 2);
@@ -316,24 +322,24 @@ public class Oscillograph : MonoBehaviour
     public void DrawAllLines()
     {
 
-        if (xInput.insertedObject != null && inputSynchB.insertedObject != null)
+        if (xInput.socketPoint.childCount != 0 && inputSynchB.socketPoint.childCount != 0)
         {
-            if (xInput.sygnalType == Socket.SygnalType.sinusoidal && inputSynchB.sygnalType == Socket.SygnalType.sinusoidal)
+            if (xInput.sinusoidalType == true && inputSynchB.sinusoidalType == true)
             {
                 DrawLissajau();
             }
         }
-        else if (xInput.insertedObject != null && inputSynchA.insertedObject != null)
+        else if (xInput.socketPoint.childCount != 0 && inputSynchA.socketPoint.childCount != 0)
         {
-            if (xInput.sygnalType == Socket.SygnalType.sinusoidal && inputSynchA.sygnalType == Socket.SygnalType.sinusoidal)
+            if (xInput.sinusoidalType == true && inputSynchA.sinusoidalType == true)
             {
                 DrawLissajau();
             }
         }
         else
         {
-            if (inputSynchA.insertedObject != null) DrawXLine();
-            if (inputSynchB.insertedObject != null) DrawYLine();
+            if (inputSynchA.socketPoint.childCount != 0) DrawXLine();
+            if (inputSynchB.socketPoint.childCount != 0) DrawYLine();
         };
     }
     private void DrawYLine()
@@ -353,7 +359,7 @@ public class Oscillograph : MonoBehaviour
         //     lastX = (int)x + (textureWidth / 2);
         //     lastY = i;
         // }
-        if (inputSynchB.sygnalType == Socket.SygnalType.sinusoidal)
+        if (inputSynchB.sinusoidalType == true)
         {
             int lastX = 0;
             int lastY = (textureHeight / 2);
@@ -413,5 +419,5 @@ public class Oscillograph : MonoBehaviour
         }
         textureLine.Apply();
     }
-*/
+
 }
