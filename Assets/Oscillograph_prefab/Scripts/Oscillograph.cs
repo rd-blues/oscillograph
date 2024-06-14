@@ -117,8 +117,8 @@ public class Oscillograph : MonoBehaviour
         {
             displayLine.SetActive(false);
         }
-        textureLine.DrawFilledRectangle(new Rect(0, 0, textureWidth, textureHeight), Color.clear);
-        textureLine.Apply();
+        //textureLine.DrawFilledRectangle(new Rect(0, 0, textureWidth, textureHeight), Color.clear);
+        //textureLine.Apply();
     }
     private void ReadWireData()
     {
@@ -183,12 +183,12 @@ public class Oscillograph : MonoBehaviour
     {
         if (powerButton.switchState == true)
         {
-            //powerLight.GetComponent<MeshRenderer>().material = materials[1];
+            powerLight.GetComponent<MeshRenderer>().material.EnableKeyword("_EMISSION");
             isOn = true;
         }
         else
         {
-            //powerLight.GetComponent<MeshRenderer>().material = materials[0];
+            powerLight.GetComponent<MeshRenderer>().material.DisableKeyword("_EMISSION");
             isOn = false;
         }
     }
@@ -201,26 +201,22 @@ public class Oscillograph : MonoBehaviour
     {
         if (inputSynchAVoltage != inputSynchAVoltageOld)
         {
-            DrawXLine();
-            DrawYLine();
+            DrawAllLines();
             inputSynchAVoltageOld = inputSynchAVoltage;
         }
         if (inputSynchBVoltage != inputSynchBVoltageOld)
         {
-            DrawXLine();
-            DrawYLine();
+            DrawAllLines();
             inputSynchBVoltageOld = inputSynchBVoltage;
         }
         if (inputSynchAFrequency != inputSynchAFrequencyOld)
         {
-            DrawXLine();
-            DrawYLine();
+            DrawAllLines();
             inputSynchAFrequencyOld = inputSynchAFrequency;
         }
         if (inputSynchBFrequency != inputSynchBFrequencyOld)
         {
-            DrawXLine();
-            DrawYLine();
+            DrawAllLines();
             inputSynchBFrequencyOld = inputSynchBFrequency;
         }
 
@@ -284,7 +280,7 @@ public class Oscillograph : MonoBehaviour
     {
         // textureLine.DrawFilledRectangle(new Rect(0, 0, textureWidth, textureHeight), Color.clear);
 
-        if (inputSynchA.sinusoidalType == true)
+        if (inputSynchA.sinusoidalType == true || plusInput.sinusoidalType == true)
         {
             int lastX = 0;
             int lastY = (textureHeight / 2);
@@ -322,6 +318,9 @@ public class Oscillograph : MonoBehaviour
     public void DrawAllLines()
     {
 
+        ClearDisplay();
+
+
         if (xInput.socketPoint.childCount != 0 && inputSynchB.socketPoint.childCount != 0)
         {
             if (xInput.sinusoidalType == true && inputSynchB.sinusoidalType == true)
@@ -340,6 +339,8 @@ public class Oscillograph : MonoBehaviour
         {
             if (inputSynchA.socketPoint.childCount != 0) DrawXLine();
             if (inputSynchB.socketPoint.childCount != 0) DrawYLine();
+            if (plusInput.socketPoint.childCount != 0) DrawXLine();
+            if (minusInput.socketPoint.childCount != 0) DrawYLine();
         };
     }
     private void DrawYLine()
@@ -359,7 +360,7 @@ public class Oscillograph : MonoBehaviour
         //     lastX = (int)x + (textureWidth / 2);
         //     lastY = i;
         // }
-        if (inputSynchB.sinusoidalType == true)
+        if (inputSynchB.sinusoidalType == true || minusInput.sinusoidalType == true)
         {
             int lastX = 0;
             int lastY = (textureHeight / 2);
@@ -417,6 +418,12 @@ public class Oscillograph : MonoBehaviour
             // lastY = (int)y + (textureHeight / 2);
 
         }
+        textureLine.Apply();
+    }
+
+    private void ClearDisplay()
+    {
+        textureLine.DrawFilledRectangle(new Rect(0, 0, textureWidth, textureHeight), Color.clear);
         textureLine.Apply();
     }
 

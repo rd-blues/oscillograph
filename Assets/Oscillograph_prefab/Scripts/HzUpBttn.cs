@@ -14,6 +14,8 @@ public class HzUpBttn : MonoBehaviour
 
     public TMP_Text hzText;
     [SerializeField] private float step = 0.1f;
+    public int bigStep;
+    public int max;
     public int point; 
     public ValueGenerator valueGeneratorComponent;
     private float hz;
@@ -32,23 +34,24 @@ public class HzUpBttn : MonoBehaviour
     private void OnMouseDown()
     {
         hz = valueGeneratorComponent.value;
-        if (hz <= 1000 && hz >= 0)
+        if (hz <= max && hz >= 0)
         {
             if (step > 0)
             {
-                if (Input.GetKey(KeyCode.LeftShift) && hz <= 900) hz += step * 1000;
-                else hz += step;
+                if (Input.GetKey(KeyCode.LeftShift) && hz <= max - bigStep) hz += bigStep;
+                else hz += step; 
             }
             else 
             {
                 if (hz > 0) 
                 {
-                    if (Input.GetKey(KeyCode.LeftShift) && hz >= 100 ) hz += step * 1000;
+                    if (Input.GetKey(KeyCode.LeftShift) && hz > 1) hz += bigStep;
                     else hz += step;
                 }
                 
             }                
             if (hz % 0.01 != 0) hz = MathF.Round(hz, point);
+            if (hz < 0) hz = 0;
             valueGeneratorComponent.value = hz;
             string hz1 = Convert.ToString(hz);
             hzText.text = hz1;

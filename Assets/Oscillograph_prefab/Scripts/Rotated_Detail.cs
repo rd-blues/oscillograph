@@ -20,17 +20,17 @@ public class Rotated_Detail : MonoBehaviour
     public float inpactOnPressure = 0.0f;
     public float[] floats;
     public float dataOut;
-
+    private int min;
    
 
 
 
     private void Start()
     {
-        
-
+        float m = Mathf.Round(minRotationAngle);
+        min = Convert.ToInt32(m);
         originalRotation = transform.localRotation;
-        valveAngle = originalRotation.y;
+        valveAngle = originalRotation.z;
     }
 
     private void Update()
@@ -56,11 +56,27 @@ public class Rotated_Detail : MonoBehaviour
             
         }
 
-        
+        int normalizedAngle = Mathf.RoundToInt(transform.localRotation.eulerAngles.z) - min;
+        if (stepDegree != 0)
+        {
+            int index = Mathf.FloorToInt((float)normalizedAngle / stepDegree);
+            if (index >= 0 && index < floats.Length)
+            {
+                dataOut = floats[index];
+            }
+            else
+            {
+                dataOut = 1;
+            }
+        }
+
         /*for (int i = 0; i < floats.Length; i++)
         {
-            float targetAngle = minRotationAngle + (i * stepDegree);
-            if (transform.rotation.z == targetAngle)
+            int targetAngle = min + (i * stepDegree);
+            float a = transform.localRotation.eulerAngles.z;
+            a = Mathf.Round(a);
+            int angle = Convert.ToInt32(a);
+            if (angle == targetAngle)
             {
                 dataOut = floats[i];
             }
